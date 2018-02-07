@@ -2,6 +2,8 @@
 
 Textual game to memorize Bible verses.
 
+Play it [online](https://magopian.github.io/bible_memo/)
+
 
 This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/create-elm-app).
 
