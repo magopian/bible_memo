@@ -1,6 +1,10 @@
 module Main exposing (..)
 
+import Dict
 import Html
+import Html.Attributes
+import Html.Events
+import Json.Decode
 
 
 ---- MODEL ----
@@ -10,25 +14,22 @@ type alias Reference =
     String
 
 
-type alias TextContent =
-    String
-
-
 type alias Verse =
     { reference : Reference
-    , text : TextContent
+    , text : String
     , withHoles : TextWithHoles
     }
 
 
 type alias TextWithHoles =
-    { text : List TextContent
-    , words : List TextContent
+    { text : List String
+    , words : List String
     }
 
 
 type alias Model =
     { verse : Verse
+    , wordChoices : Dict.Dict Int String
     }
 
 
@@ -42,6 +43,7 @@ init =
                     [ "For ", " so loved the ", " that he gave his one and only ", ", that whoever believes in him shall not perish but have eternal ", "." ]
                     [ "God", "world", "Son", "life" ]
                 )
+      , wordChoices = Dict.empty
       }
     , Cmd.none
     )
@@ -52,12 +54,19 @@ init =
 
 
 type Msg
-    = NoOp
+    = WordChosen Int String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        WordChosen optionNumber wordChosen ->
+            ( { model
+                | wordChoices =
+                    Dict.insert optionNumber wordChosen model.wordChoices
+              }
+            , Cmd.none
+            )
 
 
 
@@ -67,39 +76,55 @@ update msg model =
 view : Model -> Html.Html Msg
 view model =
     Html.div []
-        [ viewText model.verse
+        [ viewVerse model.verse
         ]
 
 
-viewText : Verse -> Html.Html Msg
-viewText bibleText =
-    Html.div []
-        [ Html.h1 []
-            [ Html.text bibleText.reference
+viewVerse : Verse -> Html.Html Msg
+viewVerse { reference, withHoles } =
+    let
+        htmlTextWithHoles =
+            -- Make all the "text with holes" parts into Html.text nodes
+            List.map Html.text withHoles.text
+
+        selects =
+            -- Make a select with the list of words to choose from... for all the words to choose from
+            List.indexedMap (\index _ -> wordChoiceSelect index withHoles.words) withHoles.words
+    in
+        Html.div []
+            [ Html.h1 []
+                [ Html.text reference
+                ]
+            , Html.p [] <| zipLists htmlTextWithHoles selects
             ]
-        , Html.p [] <| viewWithHoles bibleText.withHoles.text bibleText.withHoles.words
-        ]
 
 
-viewWithHoles : List TextContent -> List TextContent -> List (Html.Html Msg)
-viewWithHoles splits words =
-    case splits of
-        [] ->
+zipLists : List (Html.Html Msg) -> List (Html.Html Msg) -> List (Html.Html Msg)
+zipLists htmlTextWithHoles selects =
+    case ( htmlTextWithHoles, selects ) of
+        ( [], [] ) ->
             []
 
-        [ lastSplit ] ->
-            [ Html.text lastSplit ]
+        ( firstSplit :: restOfSplits, [] ) ->
+            firstSplit :: zipLists restOfSplits []
 
-        head :: tail ->
-            Html.text head :: (viewWordsChoice words) :: viewWithHoles tail words
+        ( [], firstSelect :: restOfSelects ) ->
+            firstSelect :: zipLists [] restOfSelects
+
+        ( firstSplit :: restOfSplits, firstSelect :: restOfSelects ) ->
+            firstSplit :: firstSelect :: zipLists restOfSplits restOfSelects
 
 
-viewWordsChoice : List TextContent -> Html.Html Msg
-viewWordsChoice words =
-    Html.select []
-        (Html.option [] []
+wordChoiceSelect : Int -> List String -> Html.Html Msg
+wordChoiceSelect index words =
+    Html.select
+        [ Html.Events.on
+            "change"
+            (Json.Decode.map (WordChosen index) Html.Events.targetValue)
+        ]
+        (Html.option [ Html.Attributes.value "" ] []
             :: (List.map
-                    (\word -> Html.option [] [ Html.text word ])
+                    (\word -> Html.option [ Html.Attributes.value word ] [ Html.text word ])
                     words
                )
         )
