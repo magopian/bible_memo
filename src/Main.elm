@@ -1,19 +1,38 @@
 module Main exposing (..)
 
-import Html exposing (Html, text, div, h1, img)
-import Html.Attributes exposing (src)
+import Html
 
 
 ---- MODEL ----
 
 
+type alias Reference =
+    String
+
+
+type alias TextContent =
+    String
+
+
+type alias Verse =
+    { reference : Reference
+    , text : TextContent
+    }
+
+
 type alias Model =
-    {}
+    { verse : Verse }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( {}, Cmd.none )
+    ( { verse =
+            Verse
+                "John 3:16"
+                "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."
+      }
+    , Cmd.none
+    )
 
 
 
@@ -33,11 +52,21 @@ update msg model =
 ---- VIEW ----
 
 
-view : Model -> Html Msg
+view : Model -> Html.Html Msg
 view model =
-    div []
-        [ img [ src "/logo.svg" ] []
-        , h1 [] [ text "Your Elm App is working!" ]
+    Html.div []
+        [ viewText model.verse
+        ]
+
+
+viewText : Verse -> Html.Html Msg
+viewText bibleText =
+    Html.p []
+        [ Html.em []
+            [ Html.text bibleText.reference
+            ]
+        , Html.br [] []
+        , Html.text bibleText.text
         ]
 
 
