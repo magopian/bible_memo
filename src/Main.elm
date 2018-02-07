@@ -27,9 +27,13 @@ type alias TextWithHoles =
     }
 
 
+type alias WordChoices =
+    Dict.Dict Int String
+
+
 type alias Model =
     { verse : Verse
-    , wordChoices : Dict.Dict Int String
+    , wordChoices : WordChoices
     }
 
 
@@ -77,6 +81,7 @@ view : Model -> Html.Html Msg
 view model =
     Html.div []
         [ viewVerse model.verse
+        , viewResult model.verse model.wordChoices
         ]
 
 
@@ -99,7 +104,31 @@ viewVerse { reference, withHoles } =
             ]
 
 
-zipLists : List (Html.Html Msg) -> List (Html.Html Msg) -> List (Html.Html Msg)
+viewResult : Verse -> WordChoices -> Html.Html Msg
+viewResult { text, withHoles } wordChoices =
+    let
+        words =
+            Dict.toList wordChoices
+                |> List.sort
+                |> List.map (\( _, word ) -> word)
+
+        textParts =
+            zipLists withHoles.text words
+
+        reconstituded =
+            String.join "" textParts
+    in
+        if reconstituded == text then
+            Html.div [] [ Html.text "CONGRATULATIONS!" ]
+        else
+            Html.div []
+                [ Html.em []
+                    [ Html.text "Select the correct words from the lists to complete the verse"
+                    ]
+                ]
+
+
+zipLists : List a -> List a -> List a
 zipLists htmlTextWithHoles selects =
     case ( htmlTextWithHoles, selects ) of
         ( [], [] ) ->
