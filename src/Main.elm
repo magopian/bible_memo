@@ -137,6 +137,7 @@ init =
 
 type Msg
     = WordChosen Int String
+    | NextVerse
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -149,6 +150,9 @@ update msg model =
               }
             , Cmd.none
             )
+
+        NextVerse ->
+            ( model, Cmd.none )
 
 
 
@@ -196,14 +200,14 @@ viewResult { text, withHoles } wordChoices =
         reconstituded =
             String.join "" textParts
     in
-        if reconstituded == text then
-            Html.div [] [ Html.text "CONGRATULATIONS!" ]
-        else
-            Html.div []
-                [ Html.em []
-                    [ Html.text "Select the correct words from the lists to complete the verse"
-                    ]
-                ]
+        Html.div []
+            [ if reconstituded == text then
+                Html.text "CONGRATULATIONS! Would you like to "
+              else
+                Html.text "Select the correct words from the lists to complete the verse, or "
+            , Html.button [ Html.Events.onClick NextVerse ]
+                [ Html.text "display another verse" ]
+            ]
 
 
 zipLists : List a -> List a -> List a
