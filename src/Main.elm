@@ -5,6 +5,24 @@ import Html
 import Html.Attributes
 import Html.Events
 import Json.Decode
+import Random
+import Random.List
+
+
+---- Verses ----
+
+
+verses : List Verse
+verses =
+    [ Verse
+        "John 3:16"
+        "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."
+        (TextWithHoles
+            [ "For ", " so loved the ", " that he gave his one and only ", ", that whoever believes in him shall not perish but have eternal ", "." ]
+            [ "God", "world", "Son", "life" ]
+        )
+    ]
+
 
 
 ---- MODEL ----
@@ -33,24 +51,49 @@ type alias WordChoices =
 
 type alias Model =
     { verse : Verse
+    , verseList : List Verse
     , wordChoices : WordChoices
+    , seed : Random.Seed
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { verse =
-            Verse
-                "John 3:16"
-                "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."
-                (TextWithHoles
-                    [ "For ", " so loved the ", " that he gave his one and only ", ", that whoever believes in him shall not perish but have eternal ", "." ]
-                    [ "God", "world", "Son", "life" ]
-                )
-      , wordChoices = Dict.empty
-      }
-    , Cmd.none
-    )
+    let
+        initialSeed =
+            -- TODO take the current time as the initial seed
+            Random.initialSeed 12345
+
+        ( ( maybeVerse, versesWithoutChosen ), seed ) =
+            -- Random.List.choose will return one random element from the list
+            -- and the remaining list.
+            initialSeed
+                |> Random.step (Random.List.choose verses)
+
+        verse =
+            case maybeVerse of
+                Just v ->
+                    v
+
+                Nothing ->
+                    Debug.crash "No verse!"
+
+        ( wordsShuffled, newSeed ) =
+            -- Shuffle the list of words to choose.
+            seed
+                |> Random.step (Random.List.shuffle verse.withHoles.words)
+
+        withHolesShuffledWords =
+            -- Use that shuffled list in place of the one we had in the verse.
+            { text = verse.withHoles.text, words = wordsShuffled }
+    in
+        ( { verse = { verse | withHoles = withHolesShuffledWords }
+          , verseList = versesWithoutChosen
+          , wordChoices = Dict.empty
+          , seed = newSeed
+          }
+        , Cmd.none
+        )
 
 
 
