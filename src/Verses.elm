@@ -52,7 +52,7 @@ verseList =
         "Gen 1:1"
         "In the beginning God created the heavens and the earth."
         (TextWithHoles
-            [ "In the ", " God ", "  the ", " and the ", "." ]
+            [ "In the ", " God ", " the ", " and the ", "." ]
             [ "beginning", "created", "heavens", "earth" ]
         )
     , Verse
