@@ -152,7 +152,63 @@ update msg model =
             )
 
         NextVerse ->
-            ( model, Cmd.none )
+            let
+                ( newVerse, newVerseList, newSeed ) =
+                    pickRandomVerse model.verseList model.seed
+
+                ( updatedVerse, updatedVerseList ) =
+                    case newVerse of
+                        Just verse ->
+                            -- Previous verse goes back in the list.
+                            ( verse, model.verse :: newVerseList )
+
+                        Nothing ->
+                            -- Nothing changes.
+                            ( model.verse, model.verseList )
+            in
+                ( { model
+                    | verse = updatedVerse
+                    , verseList = updatedVerseList
+                    , wordChoices = Dict.empty
+                    , seed = newSeed
+                  }
+                , Cmd.none
+                )
+
+
+pickRandomVerse : List Verse -> Random.Seed -> ( Maybe Verse, List Verse, Random.Seed )
+pickRandomVerse verses seed =
+    let
+        ( ( maybeVerse, versesWithoutChosen ), newSeed ) =
+            -- Random.List.choose will return one random element from the list
+            -- and the remaining list.
+            seed
+                |> Random.step (Random.List.choose verses)
+
+        ( maybeShuffledVerse, updatedNewSeed ) =
+            shuffleVerseWords maybeVerse newSeed
+    in
+        ( maybeShuffledVerse, versesWithoutChosen, updatedNewSeed )
+
+
+shuffleVerseWords : Maybe Verse -> Random.Seed -> ( Maybe Verse, Random.Seed )
+shuffleVerseWords maybeVerse seed =
+    case maybeVerse of
+        Just verse ->
+            let
+                ( wordsShuffled, newSeed ) =
+                    -- Shuffle the list of words to choose.
+                    seed
+                        |> Random.step (Random.List.shuffle verse.withHoles.words)
+
+                withHolesShuffledWords =
+                    -- Use that shuffled list in place of the one we had in the verse.
+                    { text = verse.withHoles.text, words = wordsShuffled }
+            in
+                ( Just { verse | withHoles = withHolesShuffledWords }, newSeed )
+
+        Nothing ->
+            ( Nothing, seed )
 
 
 
