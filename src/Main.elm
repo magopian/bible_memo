@@ -99,36 +99,59 @@ init =
             -- TODO take the current time as the initial seed
             Random.initialSeed 12345
 
-        ( ( maybeVerse, versesWithoutChosen ), seed ) =
-            -- Random.List.choose will return one random element from the list
-            -- and the remaining list.
-            initialSeed
-                |> Random.step (Random.List.choose verses)
+        ( verse, verseList, newSeed ) =
+            pickRandomVerse verses initialSeed
 
-        verse =
-            case maybeVerse of
-                Just v ->
-                    v
+        unpackedVerse =
+            case verse of
+                Just verse ->
+                    verse
 
                 Nothing ->
-                    Debug.crash "No verse!"
-
-        ( wordsShuffled, newSeed ) =
-            -- Shuffle the list of words to choose.
-            seed
-                |> Random.step (Random.List.shuffle verse.withHoles.words)
-
-        withHolesShuffledWords =
-            -- Use that shuffled list in place of the one we had in the verse.
-            { text = verse.withHoles.text, words = wordsShuffled }
+                    Debug.crash "no verses!"
     in
-        ( { verse = { verse | withHoles = withHolesShuffledWords }
-          , verseList = versesWithoutChosen
+        ( { verse = unpackedVerse
+          , verseList = verseList
           , wordChoices = Dict.empty
           , seed = newSeed
           }
         , Cmd.none
         )
+
+
+pickRandomVerse : List Verse -> Random.Seed -> ( Maybe Verse, List Verse, Random.Seed )
+pickRandomVerse verses seed =
+    let
+        ( ( maybeVerse, versesWithoutChosen ), newSeed ) =
+            -- Random.List.choose will return one random element from the list
+            -- and the remaining list.
+            seed
+                |> Random.step (Random.List.choose verses)
+
+        ( maybeShuffledVerse, updatedNewSeed ) =
+            shuffleVerseWords maybeVerse newSeed
+    in
+        ( maybeShuffledVerse, versesWithoutChosen, updatedNewSeed )
+
+
+shuffleVerseWords : Maybe Verse -> Random.Seed -> ( Maybe Verse, Random.Seed )
+shuffleVerseWords maybeVerse seed =
+    case maybeVerse of
+        Just verse ->
+            let
+                ( wordsShuffled, newSeed ) =
+                    -- Shuffle the list of words to choose.
+                    seed
+                        |> Random.step (Random.List.shuffle verse.withHoles.words)
+
+                withHolesShuffledWords =
+                    -- Use that shuffled list in place of the one we had in the verse.
+                    { text = verse.withHoles.text, words = wordsShuffled }
+            in
+                ( Just { verse | withHoles = withHolesShuffledWords }, newSeed )
+
+        Nothing ->
+            ( Nothing, seed )
 
 
 
@@ -174,41 +197,6 @@ update msg model =
                   }
                 , Cmd.none
                 )
-
-
-pickRandomVerse : List Verse -> Random.Seed -> ( Maybe Verse, List Verse, Random.Seed )
-pickRandomVerse verses seed =
-    let
-        ( ( maybeVerse, versesWithoutChosen ), newSeed ) =
-            -- Random.List.choose will return one random element from the list
-            -- and the remaining list.
-            seed
-                |> Random.step (Random.List.choose verses)
-
-        ( maybeShuffledVerse, updatedNewSeed ) =
-            shuffleVerseWords maybeVerse newSeed
-    in
-        ( maybeShuffledVerse, versesWithoutChosen, updatedNewSeed )
-
-
-shuffleVerseWords : Maybe Verse -> Random.Seed -> ( Maybe Verse, Random.Seed )
-shuffleVerseWords maybeVerse seed =
-    case maybeVerse of
-        Just verse ->
-            let
-                ( wordsShuffled, newSeed ) =
-                    -- Shuffle the list of words to choose.
-                    seed
-                        |> Random.step (Random.List.shuffle verse.withHoles.words)
-
-                withHolesShuffledWords =
-                    -- Use that shuffled list in place of the one we had in the verse.
-                    { text = verse.withHoles.text, words = wordsShuffled }
-            in
-                ( Just { verse | withHoles = withHolesShuffledWords }, newSeed )
-
-        Nothing ->
-            ( Nothing, seed )
 
 
 
