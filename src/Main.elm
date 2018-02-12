@@ -32,19 +32,17 @@ init =
             -- TODO take the current time as the initial seed
             Random.initialSeed 12345
 
-        ( verse, verseList, newSeed ) =
-            pickRandomVerse Verses.verses initialSeed
+        ( shuffledVerseList, seed ) =
+            shuffleList Verses.verseList initialSeed
 
-        unpackedVerse =
-            case verse of
-                Just verse ->
-                    verse
+        ( verse, remainingVerseList ) =
+            pickVerse shuffledVerseList
 
-                Nothing ->
-                    Debug.crash "no verses!"
+        ( shuffledVerse, newSeed ) =
+            shuffleVerseWords verse seed
     in
-        ( { verse = unpackedVerse
-          , verseList = verseList
+        ( { verse = shuffledVerse
+          , verseList = remainingVerseList
           , wordChoices = Dict.empty
           , seed = newSeed
           }
@@ -52,39 +50,34 @@ init =
         )
 
 
-pickRandomVerse : List Verses.Verse -> Random.Seed -> ( Maybe Verses.Verse, List Verses.Verse, Random.Seed )
-pickRandomVerse verses seed =
+shuffleList : List a -> Random.Seed -> ( List a, Random.Seed )
+shuffleList list seed =
+    seed
+        |> Random.step (Random.List.shuffle list)
+
+
+pickVerse : List Verses.Verse -> ( Verses.Verse, List Verses.Verse )
+pickVerse verseList =
+    case verseList of
+        head :: tail ->
+            ( head, tail )
+
+        [] ->
+            Debug.crash "no verses!"
+
+
+shuffleVerseWords : Verses.Verse -> Random.Seed -> ( Verses.Verse, Random.Seed )
+shuffleVerseWords verse seed =
     let
-        ( ( maybeVerse, versesWithoutChosen ), newSeed ) =
-            -- Random.List.choose will return one random element from the list
-            -- and the remaining list.
-            seed
-                |> Random.step (Random.List.choose verses)
+        -- Shuffle the list of words to choose.
+        ( wordsShuffled, newSeed ) =
+            shuffleList verse.withHoles.words seed
 
-        ( maybeShuffledVerse, updatedNewSeed ) =
-            shuffleVerseWords maybeVerse newSeed
+        -- Use that shuffled list in place of the one we had in the verse.
+        withHolesShuffledWords =
+            { text = verse.withHoles.text, words = wordsShuffled }
     in
-        ( maybeShuffledVerse, versesWithoutChosen, updatedNewSeed )
-
-
-shuffleVerseWords : Maybe Verses.Verse -> Random.Seed -> ( Maybe Verses.Verse, Random.Seed )
-shuffleVerseWords maybeVerse seed =
-    case maybeVerse of
-        Just verse ->
-            let
-                ( wordsShuffled, newSeed ) =
-                    -- Shuffle the list of words to choose.
-                    seed
-                        |> Random.step (Random.List.shuffle verse.withHoles.words)
-
-                withHolesShuffledWords =
-                    -- Use that shuffled list in place of the one we had in the verse.
-                    { text = verse.withHoles.text, words = wordsShuffled }
-            in
-                ( Just { verse | withHoles = withHolesShuffledWords }, newSeed )
-
-        Nothing ->
-            ( Nothing, seed )
+        ( { verse | withHoles = withHolesShuffledWords }, newSeed )
 
 
 
@@ -109,22 +102,18 @@ update msg model =
 
         NextVerse ->
             let
-                ( newVerse, newVerseList, newSeed ) =
-                    pickRandomVerse model.verseList model.seed
+                fullList =
+                    model.verseList ++ [ model.verse ]
 
-                ( updatedVerse, updatedVerseList ) =
-                    case newVerse of
-                        Just verse ->
-                            -- Previous verse goes back in the list.
-                            ( verse, model.verse :: newVerseList )
+                ( verse, remainingVerseList ) =
+                    pickVerse fullList
 
-                        Nothing ->
-                            -- Nothing changes.
-                            ( model.verse, model.verseList )
+                ( shuffledVerse, newSeed ) =
+                    shuffleVerseWords verse model.seed
             in
                 ( { model
-                    | verse = updatedVerse
-                    , verseList = updatedVerseList
+                    | verse = shuffledVerse
+                    , verseList = remainingVerseList
                     , wordChoices = Dict.empty
                     , seed = newSeed
                   }
