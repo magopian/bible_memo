@@ -206,13 +206,13 @@ update msg model =
 view : Model -> Html.Html Msg
 view model =
     Html.div []
-        [ viewVerse model.verse
+        [ viewVerse model.verse model.wordChoices
         , viewResult model.verse model.wordChoices
         ]
 
 
-viewVerse : Verse -> Html.Html Msg
-viewVerse { reference, withHoles } =
+viewVerse : Verse -> WordChoices -> Html.Html Msg
+viewVerse { reference, withHoles } wordChoices =
     let
         htmlTextWithHoles =
             -- Make all the "text with holes" parts into Html.text nodes
@@ -220,7 +220,7 @@ viewVerse { reference, withHoles } =
 
         selects =
             -- Make a select with the list of words to choose from... for all the words to choose from
-            List.indexedMap (\index _ -> wordChoiceSelect index withHoles.words) withHoles.words
+            List.indexedMap (\index _ -> wordChoiceSelect index withHoles.words (Dict.get index wordChoices)) withHoles.words
     in
         Html.div []
             [ Html.h1 []
@@ -270,12 +270,13 @@ zipLists htmlTextWithHoles selects =
             firstSplit :: firstSelect :: zipLists restOfSplits restOfSelects
 
 
-wordChoiceSelect : Int -> List String -> Html.Html Msg
-wordChoiceSelect index words =
+wordChoiceSelect : Int -> List String -> Maybe String -> Html.Html Msg
+wordChoiceSelect index words maybeSelectedWord =
     Html.select
         [ Html.Events.on
             "change"
             (Json.Decode.map (WordChosen index) Html.Events.targetValue)
+        , Html.Attributes.value <| Maybe.withDefault "" maybeSelectedWord
         ]
         (Html.option [ Html.Attributes.value "" ] []
             :: (List.map
