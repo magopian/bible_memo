@@ -25,26 +25,29 @@ type alias Model =
     }
 
 
-init : ( Model, Cmd Msg )
-init =
-    let
-        initialSeed =
-            -- TODO take the current time as the initial seed
-            Random.initialSeed 12345
+type alias Flags =
+    { initialSeed : Int }
 
-        ( shuffledVerseList, seed ) =
-            shuffleList Verses.verseList initialSeed
+
+init : Flags -> ( Model, Cmd Msg )
+init { initialSeed } =
+    let
+        seed0 =
+            Random.initialSeed initialSeed
+
+        ( shuffledVerseList, seed1 ) =
+            shuffleList Verses.verseList seed0
 
         ( verse, remainingVerseList ) =
             pickVerse shuffledVerseList
 
-        ( shuffledVerse, newSeed ) =
-            shuffleVerseWords verse seed
+        ( shuffledVerse, seed2 ) =
+            shuffleVerseWords verse seed1
     in
         ( { verse = shuffledVerse
           , verseList = remainingVerseList
           , wordChoices = Dict.empty
-          , seed = newSeed
+          , seed = seed2
           }
         , Cmd.none
         )
@@ -212,9 +215,9 @@ wordChoiceSelect index words maybeSelectedWord =
 ---- PROGRAM ----
 
 
-main : Program Never Model Msg
+main : Program Flags Model Msg
 main =
-    Html.program
+    Html.programWithFlags
         { view = view
         , init = init
         , update = update
