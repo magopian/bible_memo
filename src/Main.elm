@@ -180,7 +180,10 @@ viewResult { text, withHoles } wordChoices =
                 Html.text "CONGRATULATIONS! Would you like to "
               else
                 Html.text "Select the correct words from the lists to complete the verse, or "
-            , Html.button [ Html.Events.onClick NextVerse ]
+            , Html.button
+                [ Html.Events.onClick NextVerse
+                , Html.Attributes.id "another-verse"
+                ]
                 [ Html.text "display another verse" ]
             ]
 
