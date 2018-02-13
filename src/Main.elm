@@ -98,10 +98,10 @@ type Msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        WordChosen optionNumber wordChosen ->
+        WordChosen selectNumber wordChosen ->
             ( { model
                 | wordChoices =
-                    Dict.insert optionNumber wordChosen model.wordChoices
+                    Dict.insert selectNumber wordChosen model.wordChoices
               }
             , Cmd.none
             )
