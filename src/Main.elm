@@ -210,7 +210,7 @@ wordChoiceSelect index words maybeSelectedWord =
         [ Html.Events.on
             "change"
             (Json.Decode.map (WordChosen index) Html.Events.targetValue)
-        , Html.Attributes.value <| Maybe.withDefault "" maybeSelectedWord
+        , Html.Attributes.value <| Maybe.withDefault "-choose a word-" maybeSelectedWord
         , Html.Attributes.id <| "select-" ++ (toString index)
         , Html.Attributes.size <| (List.length words) + 1
         ]
