@@ -1,12 +1,14 @@
 module Main exposing (..)
 
 import Dict
+import Dom
 import Html
 import Html.Attributes
 import Html.Events
 import Json.Decode
 import Random
 import Random.List
+import Task
 import Verses
 
 
@@ -49,7 +51,7 @@ init { initialSeed } =
           , wordChoices = Dict.empty
           , seed = seed2
           }
-        , Cmd.none
+        , Task.attempt Focused (Dom.focus "select-0")
         )
 
 
@@ -90,6 +92,7 @@ shuffleVerseWords verse seed =
 type Msg
     = WordChosen Int String
     | NextVerse
+    | Focused (Result Dom.Error ())
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -120,8 +123,11 @@ update msg model =
                     , wordChoices = Dict.empty
                     , seed = newSeed
                   }
-                , Cmd.none
+                , Task.attempt Focused (Dom.focus "select-0")
                 )
+
+        Focused _ ->
+            ( model, Cmd.none )
 
 
 
@@ -202,8 +208,13 @@ wordChoiceSelect index words maybeSelectedWord =
             "change"
             (Json.Decode.map (WordChosen index) Html.Events.targetValue)
         , Html.Attributes.value <| Maybe.withDefault "" maybeSelectedWord
+        , Html.Attributes.id <| "select-" ++ (toString index)
+        , Html.Attributes.size <| (List.length words) + 1
         ]
-        (Html.option [ Html.Attributes.value "" ] []
+        (Html.option
+            [ Html.Attributes.value "-choose a word-"
+            ]
+            []
             :: (List.map
                     (\word -> Html.option [ Html.Attributes.value word ] [ Html.text word ])
                     words
