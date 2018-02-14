@@ -1,4 +1,4 @@
-module Verses exposing (Dataset, Datasets, TextWithHoles, Verse, datasets, verseList)
+module Verses exposing (Dataset, Datasets, TextWithHoles, Verse, datasets)
 
 
 type alias Reference =
@@ -29,24 +29,12 @@ type alias Datasets =
 datasets : Datasets
 datasets =
     [ ( "french", frenchVerseList )
-    , ( "english", verseList )
+    , ( "english", englishVerseList )
     ]
 
 
-frenchVerseList : List Verse
-frenchVerseList =
-    [ Verse
-        "Jean 3:16"
-        "En effet, Dieu a tant aimé le monde qu'il a donné son Fils unique afin que quiconque croit en lui ne périsse pas mais ait la vie éternelle."
-        (TextWithHoles
-            [ "En effet, ", " a tant aimé le ", " qu'il a donné son ", " unique afin que quiconque croit en lui ne périsse pas mais ait la ", " éternelle." ]
-            [ "Dieu", "monde", "Fils", "vie" ]
-        )
-    ]
-
-
-verseList : List Verse
-verseList =
+englishVerseList : List Verse
+englishVerseList =
     [ Verse
         "John 3:16"
         "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."
@@ -739,5 +727,710 @@ verseList =
         (TextWithHoles
             [ "By this all ", " will know that you are my ", ", if you love one ", ".”" ]
             [ "men", "disciples", "another" ]
+        )
+    ]
+
+
+frenchVerseList : List Verse
+frenchVerseList =
+    [ Verse
+        "Jean 3:16"
+        "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle."
+        (TextWithHoles
+            [ "Car ", " a tant aimé le ", " qu'il a donné son ", " unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la ", " éternelle." ]
+            [ "Dieu", "monde", "Fils", "vie" ]
+        )
+    , Verse
+        "Romains 3:23"
+        "Car tous ont péché et sont privés de la gloire de Dieu;"
+        (TextWithHoles
+            [ "Car ", " ont péché et sont ", " de la gloire de ", ";" ]
+            [ "tous", "privés", "Dieu" ]
+        )
+    , Verse
+        "Timothée 3:16"
+        "Toute Écriture est inspirée de Dieu, et utile pour enseigner, pour convaincre, pour corriger, pour instruire dans la justice,"
+        (TextWithHoles
+            [ "Toute ", " est inspirée de Dieu, et utile pour ", ", pour convaincre, pour corriger, pour instruire dans la ", "," ]
+            [ "Écriture", "enseigner", "justice" ]
+        )
+    , Verse
+        "Romains 12:1"
+        "Je vous exhorte donc, frères, par les compassions de Dieu, à offrir vos corps comme un sacrifice vivant, saint, agréable à Dieu, ce qui sera de votre part un culte raisonnable."
+        (TextWithHoles
+            [ "Je vous exhorte donc, ", ", par les compassions de Dieu, à offrir vos corps comme un ", " vivant, saint, agréable à Dieu, ce qui sera de votre part un ", " raisonnable." ]
+            [ "frères", "sacrifice", "culte" ]
+        )
+    , Verse
+        "Galates 5:22"
+        "Mais le fruit de l'Esprit, c'est l'amour, la joie, la paix, la patience, la bonté, la bénignité, la fidélité, la douceur, la tempérance;"
+        (TextWithHoles
+            [ "Mais le ", " de l'", ", c'est l'amour, la joie, la paix, la patience, la bonté, la bénignité, la fidélité, la ", ", la tempérance;" ]
+            [ "fruit", "Esprit", "douceur" ]
+        )
+    , Verse
+        "Éphésiens 2:8"
+        "Car c'est par la grâce que vous êtes sauvés, par le moyen de la foi. Et cela ne vient pas de vous, c'est le don de Dieu."
+        (TextWithHoles
+            [ "Car c'est par la ", " que vous êtes ", ", par le moyen de la foi. Et cela ne vient pas de vous, c'est le don de ", "." ]
+            [ "grâce", "sauvés", "Dieu" ]
+        )
+    , Verse
+        "Romains 8:28"
+        "Nous savons, du reste, que toutes choses concourent au bien de ceux qui aiment Dieu, de ceux qui sont appelés selon son dessein."
+        (TextWithHoles
+            [ "Nous savons, du reste, que toutes choses ", " au bien de ceux qui aiment ", ", de ceux qui sont appelés selon son ", "." ]
+            [ "concourent", "Dieu", "dessein" ]
+        )
+    , Verse
+        "Matthieu 28:19"
+        "Allez, faites de toutes les nations des disciples, les baptisant au nom du Père, du Fils et du Saint Esprit,"
+        (TextWithHoles
+            [ "Allez, faites de toutes les nations des ", ", les baptisant au nom du ", ", du ", " et du Saint ", "," ]
+            [ "disciples", "Père", "Fils", "Esprit" ]
+        )
+    , Verse
+        "Romains 12:2"
+        "Ne vous conformez pas au siècle présent, mais soyez transformés par le renouvellement de l'intelligence, afin que vous discerniez quelle est la volonté de Dieu, ce qui est bon, agréable et parfait."
+        (TextWithHoles
+            [ "Ne vous conformez pas au siècle présent, mais soyez transformés par le renouvellement de l'", ", afin que vous discerniez quelle est la volonté de ", ", ce qui est bon, agréable et ", "." ]
+            [ "intelligence", "Dieu", "parfait" ]
+        )
+    , Verse
+        "Jean 14:6"
+        "Jésus lui dit: Je suis le chemin, la vérité, et la vie. Nul ne vient au Père que par moi."
+        (TextWithHoles
+            [ "Jésus lui dit: Je suis le ", ", la ", ", et la ", ". Nul ne vient au Père que par moi." ]
+            [ "chemin", "vérité", "vie" ]
+        )
+    , Verse
+        "Actes 1:8"
+        "Mais vous recevrez une puissance, le Saint Esprit survenant sur vous, et vous serez mes témoins à Jérusalem, dans toute la Judée, dans la Samarie, et jusqu'aux extrémités de la terre."
+        (TextWithHoles
+            [ "Mais vous recevrez une ", ", le Saint Esprit survenant sur vous, et vous serez mes ", " à Jérusalem, dans toute la Judée, dans la Samarie, et jusqu'aux extrémités de la ", "." ]
+            [ "puissance", "témoins", "terre" ]
+        )
+    , Verse
+        "Actes 2:38"
+        "Pierre leur dit: Repentez-vous, et que chacun de vous soit baptisé au nom de Jésus Christ, pour le pardon de vos péchés; et vous recevrez le don du Saint Esprit."
+        (TextWithHoles
+            [ "Pierre leur dit: Repentez-vous, et que chacun de vous soit ", " au nom de Jésus Christ, pour le ", " de vos péchés; et vous recevrez le don du Saint ", "." ]
+            [ "baptisé", "pardon", "Esprit" ]
+        )
+    , Verse
+        "Romains 6:23"
+        "Car le salaire du péché, c'est la mort; mais le don gratuit de Dieu, c'est la vie éternelle en Jésus Christ notre Seigneur."
+        (TextWithHoles
+            [ "Car le salaire du péché, c'est la ", "; mais le don ", " de Dieu, c'est la vie ", " en Jésus Christ notre Seigneur." ]
+            [ "mort", "gratuit", "éternelle" ]
+        )
+    , Verse
+        "Genèse 1:1"
+        "Au commencement, Dieu créa les cieux et la terre."
+        (TextWithHoles
+            [ "Au ", ", Dieu créa les ", " et la ", "." ]
+            [ "commencement", "cieux", "terre" ]
+        )
+    , Verse
+        "Jean 1:12"
+        "Mais à tous ceux qui l'ont reçue, à ceux qui croient en son nom, elle a donné le pouvoir de devenir enfants de Dieu, lesquels sont nés,"
+        (TextWithHoles
+            [ "Mais à tous ceux qui l'ont ", ", à ceux qui croient en son ", ", elle a donné le pouvoir de devenir enfants de ", ", lesquels sont nés," ]
+            [ "reçue", "nom", "Dieu" ]
+        )
+    , Verse
+        "Jean 1:1"
+        "Au commencement était la Parole, et la Parole était avec Dieu, et la Parole était Dieu."
+        (TextWithHoles
+            [ "Au ", " était la ", ", et la Parole était avec Dieu, et la Parole était ", "." ]
+            [ "commencement", "Parole", "Dieu" ]
+        )
+    , Verse
+        "Tite 3:5"
+        "il nous a sauvés, non à cause des oeuvres de justice que nous aurions faites, mais selon sa miséricorde, par le baptême de la régénération et le renouvellement du Saint Esprit,"
+        (TextWithHoles
+            [ "il nous a ", ", non à cause des oeuvres de ", " que nous aurions faites, mais selon sa ", ", par le baptême de la régénération et le renouvellement du Saint Esprit," ]
+            [ "sauvés", "justice", "miséricorde" ]
+        )
+    , Verse
+        "Romains 10:9"
+        "Si tu confesses de ta bouche le Seigneur Jésus, et si tu crois dans ton coeur que Dieu l'a ressuscité des morts, tu seras sauvé."
+        (TextWithHoles
+            [ "Si tu ", " de ta bouche le Seigneur Jésus, et si tu crois dans ton ", " que Dieu l'a ressuscité des morts, tu seras ", "." ]
+            [ "confesses", "coeur", "sauvé" ]
+        )
+    , Verse
+        "Jean 1:14"
+        "Et la parole a été faite chair, et elle a habité parmi nous, pleine de grâce et de vérité; et nous avons contemplé sa gloire, une gloire comme la gloire du Fils unique venu du Père."
+        (TextWithHoles
+            [ "Et la ", " a été faite chair, et elle a habité parmi nous, pleine de grâce et de ", "; et nous avons contemplé sa gloire, une gloire comme la gloire du Fils unique venu du ", "." ]
+            [ "parole", "vérité", "Père" ]
+        )
+    , Verse
+        "Genèse 1:26"
+        "Puis Dieu dit: Faisons l'homme à notre image, selon notre ressemblance, et qu'il domine sur les poissons de la mer, sur les oiseaux du ciel, sur le bétail, sur toute la terre, et sur tous les reptiles qui rampent sur la terre."
+        (TextWithHoles
+            [ "Puis Dieu dit: Faisons l'homme à notre ", ", selon notre ressemblance, et qu'il domine sur les ", " de la mer, sur les oiseaux du ciel, sur le bétail, sur toute la terre, et sur tous les reptiles qui rampent sur la ", "." ]
+            [ "image", "poissons", "terre" ]
+        )
+    , Verse
+        "Proverbes 3:5"
+        "Confie-toi en l'Éternel de tout ton coeur, Et ne t'appuie pas sur ta sagesse;"
+        (TextWithHoles
+            [ "Confie-toi en l'", " de tout ton ", ", Et ne t'appuie pas sur ta ", ";" ]
+            [ "Éternel", "coeur", "sagesse" ]
+        )
+    , Verse
+        "Romains 5:8"
+        "Mais Dieu prouve son amour envers nous, en ce que, lorsque nous étions encore des pécheurs, Christ est mort pour nous."
+        (TextWithHoles
+            [ "Mais Dieu prouve son ", " envers nous, en ce que, lorsque nous étions encore des ", ", Christ est mort pour ", "." ]
+            [ "amour", "pécheurs", "nous" ]
+        )
+    , Verse
+        "Jérémie 29:11"
+        "Car je connais les projets que j'ai formés sur vous, dit l'Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance."
+        (TextWithHoles
+            [ "Car je connais les ", " que j'ai formés sur vous, dit l'Éternel, projets de ", " et non de malheur, afin de vous donner un avenir et de l'", "." ]
+            [ "projets", "paix", "espérance" ]
+        )
+    , Verse
+        "Éphésiens 4:11"
+        "Et il a donné les uns comme apôtres, les autres comme prophètes, les autres comme évangélistes, les autres comme pasteurs et docteurs,"
+        (TextWithHoles
+            [ "Et il a donné les uns comme ", ", les autres comme ", ", les autres comme évangélistes, les autres comme pasteurs et ", "," ]
+            [ "apôtres", "prophètes", "docteurs" ]
+        )
+    , Verse
+        "Genèse 1:27"
+        "Dieu créa l'homme à son image, il le créa à l'image de Dieu, il créa l'homme et la femme."
+        (TextWithHoles
+            [ "Dieu créa l'homme à son ", ", il le créa à l'image de ", ", il créa l'homme et la ", "." ]
+            [ "image", "Dieu", "femme" ]
+        )
+    , Verse
+        "Actes 2:42"
+        "Ils persévéraient dans l'enseignement des apôtres, dans la communion fraternelle, dans la fraction du pain, et dans les prières."
+        (TextWithHoles
+            [ "Ils persévéraient dans l'enseignement des ", ", dans la ", " fraternelle, dans la fraction du pain, et dans les ", "." ]
+            [ "apôtres", "communion", "prières" ]
+        )
+    , Verse
+        "Matthieu 11:28"
+        "Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos."
+        (TextWithHoles
+            [ "Venez à moi, vous tous qui êtes ", " et ", ", et je vous donnerai du ", "." ]
+            [ "fatigués", "chargés", "repos" ]
+        )
+    , Verse
+        "Jean 1:9"
+        "Si nous confessons nos péchés, il est fidèle et juste pour nous les pardonner, et pour nous purifier de toute iniquité."
+        (TextWithHoles
+            [ "Si nous ", " nos péchés, il est fidèle et juste pour nous les ", ", et pour nous ", " de toute iniquité." ]
+            [ "confessons", "pardonner", "purifier" ]
+        )
+    , Verse
+        "Jean 3:3"
+        "Jésus lui répondit: En vérité, en vérité, je te le dis, si un homme ne naît de nouveau, il ne peut voir le royaume de Dieu."
+        (TextWithHoles
+            [ "Jésus lui répondit: En vérité, en vérité, je te le dis, si un ", " ne naît de ", ", il ne peut voir le ", " de Dieu." ]
+            [ "homme", "nouveau", "royaume" ]
+        )
+    , Verse
+        "Jean 10:10"
+        "Le voleur ne vient que pour dérober, égorger et détruire; moi, je suis venu afin que les brebis aient la vie, et qu'elles soient dans l'abondance."
+        (TextWithHoles
+            [ "Le ", " ne vient que pour dérober, égorger et détruire; moi, je suis venu afin que les brebis aient la ", ", et qu'elles soient dans l'", "." ]
+            [ "voleur", "vie", "abondance" ]
+        )
+    , Verse
+        "Romains 5:12"
+        "C'est pourquoi, comme par un seul homme le péché est entré dans le monde, et par le péché la mort, et qu'ainsi la mort s'est étendue sur tous les hommes, parce que tous ont péché,..."
+        (TextWithHoles
+            [ "C'est pourquoi, comme par un seul homme le ", " est entré dans le monde, et par le péché la ", ", et qu'ainsi la mort s'est étendue sur tous les ", ", parce que tous ont péché,..." ]
+            [ "péché", "mort", "hommes" ]
+        )
+    , Verse
+        "Marc 16:15"
+        "Puis il leur dit: Allez par tout le monde, et prêchez la bonne nouvelle à toute la création."
+        (TextWithHoles
+            [ "Puis il leur dit: Allez par tout le ", ", et prêchez la bonne ", " à toute la ", "." ]
+            [ "monde", "nouvelle", "création" ]
+        )
+    , Verse
+        "Actes 4:12"
+        "Il n'y a de salut en aucun autre; car il n'y a sous le ciel aucun autre nom qui ait été donné parmi les hommes, par lequel nous devions être sauvés."
+        (TextWithHoles
+            [ "Il n'y a de ", " en aucun autre; car il n'y a sous le ciel aucun autre nom qui ait été donné parmi les ", ", par lequel nous devions être ", "." ]
+            [ "salut", "hommes", "sauvés" ]
+        )
+    , Verse
+        "Corinthiens 5:17"
+        "Si quelqu'un est en Christ, il est une nouvelle créature. Les choses anciennes sont passées; voici, toutes choses sont devenues nouvelles."
+        (TextWithHoles
+            [ "Si quelqu'un est en ", ", il est une nouvelle ", ". Les choses anciennes sont passées; voici, toutes choses sont devenues ", "." ]
+            [ "Christ", "créature", "nouvelles" ]
+        )
+    , Verse
+        "Jean 14:1"
+        "Que votre coeur ne se trouble point. Croyez en Dieu, et croyez en moi."
+        (TextWithHoles
+            [ "Que votre ", " ne se trouble point. ", " en Dieu, et croyez en ", "." ]
+            [ "coeur", "Croyez", "moi" ]
+        )
+    , Verse
+        "Jean 1:9"
+        "Cette lumière était la véritable lumière, qui, en venant dans le monde, éclaire tout homme."
+        (TextWithHoles
+            [ "Cette ", " était la véritable lumière, qui, en venant dans le ", ", éclaire tout ", "." ]
+            [ "lumière", "monde", "homme" ]
+        )
+    , Verse
+        "Matthieu 28:18"
+        "Jésus, s'étant approché, leur parla ainsi: Tout pouvoir m'a été donné dans le ciel et sur la terre."
+        (TextWithHoles
+            [ "Jésus, s'étant approché, leur parla ainsi: Tout ", " m'a été donné dans le ", " et sur la ", "." ]
+            [ "pouvoir", "ciel", "terre" ]
+        )
+    , Verse
+        "Romains 5:1"
+        "Étant donc justifiés par la foi, nous avons la paix avec Dieu par notre Seigneur Jésus Christ,"
+        (TextWithHoles
+            [ "Étant donc ", " par la foi, nous avons la ", " avec Dieu par notre Seigneur ", " Christ," ]
+            [ "justifiés", "paix", "Jésus" ]
+        )
+    , Verse
+        "Philippiens 4:13"
+        "Je puis tout par celui qui me fortifie."
+        (TextWithHoles
+            [ "Je puis ", " par ", " qui me ", "." ]
+            [ "tout", "celui", "fortifie" ]
+        )
+    , Verse
+        "Ésaïe 9:6"
+        "Car un enfant nous est né, un fils nous est donné, Et la domination reposera sur son épaule; On l'appellera Admirable, Conseiller, Dieu puissant, Père éternel, Prince de la paix."
+        (TextWithHoles
+            [ "Car un ", " nous est né, un fils nous est donné, Et la domination reposera sur son épaule; On l'appellera ", ", Conseiller, Dieu puissant, Père éternel, ", " de la paix." ]
+            [ "enfant", "Admirable", "Prince" ]
+        )
+    , Verse
+        "Philippiens 4:6"
+        "Ne vous inquiétez de rien; mais en toute chose faites connaître vos besoins à Dieu par des prières et des supplications, avec des actions de grâces."
+        (TextWithHoles
+            [ "Ne vous ", " de rien; mais en toute chose faites connaître vos besoins à Dieu par des ", " et des supplications, avec des actions de ", "." ]
+            [ "inquiétez", "prières", "grâces" ]
+        )
+    , Verse
+        "Romains 8:1"
+        "Il n'y a donc maintenant aucune condamnation pour ceux qui sont en Jésus Christ."
+        (TextWithHoles
+            [ "Il n'y a donc ", " aucune ", " pour ceux qui sont en ", " Christ." ]
+            [ "maintenant", "condamnation", "Jésus" ]
+        )
+    , Verse
+        "Jean 2:1"
+        "Trois jours après, il y eut des noces à Cana en Galilée. La mère de Jésus était là,"
+        (TextWithHoles
+            [ "Trois jours après, il y eut des ", " à Cana en ", ". La mère de ", " était là," ]
+            [ "noces", "Galilée", "Jésus" ]
+        )
+    , Verse
+        "Actes 2:1"
+        "Le jour de la Pentecôte, ils étaient tous ensemble dans le même lieu."
+        (TextWithHoles
+            [ "Le jour de la ", ", ils étaient tous ", " dans le même ", "." ]
+            [ "Pentecôte", "ensemble", "lieu" ]
+        )
+    , Verse
+        "Galates 2:20"
+        "J'ai été crucifié avec Christ; et si je vis, ce n'est plus moi qui vis, c'est Christ qui vit en moi; si je vis maintenant dans la chair, je vis dans la foi au Fils de Dieu, qui m'a aimé et qui s'est livré lui-même pour moi."
+        (TextWithHoles
+            [ "J'ai été ", " avec Christ; et si je vis, ce n'est plus moi qui vis, c'est Christ qui vit en moi; si je vis maintenant dans la ", ", je vis dans la foi au Fils de Dieu, qui m'a ", " et qui s'est livré lui-même pour moi." ]
+            [ "crucifié", "chair", "aimé" ]
+        )
+    , Verse
+        "Romains 1:16"
+        "Car je n'ai point honte de l'Évangile: c'est une puissance de Dieu pour le salut de quiconque croit, du Juif premièrement, puis du Grec,"
+        (TextWithHoles
+            [ "Car je n'ai point honte de l'", ": c'est une puissance de Dieu pour le ", " de quiconque ", ", du Juif premièrement, puis du Grec," ]
+            [ "Évangile", "salut", "croit" ]
+        )
+    , Verse
+        "Jean 13:34"
+        "Je vous donne un commandement nouveau: Aimez-vous les uns les autres; comme je vous ai aimés, vous aussi, aimez-vous les uns les autres."
+        (TextWithHoles
+            [ "Je vous donne un ", " nouveau: Aimez-vous les uns les autres; comme je vous ai ", ", vous aussi, aimez-vous les uns les ", "." ]
+            [ "commandement", "aimés", "autres" ]
+        )
+    , Verse
+        "Jean 3:1"
+        "Mais il y eut un homme d'entre les pharisiens, nommé Nicodème, un chef des Juifs,"
+        (TextWithHoles
+            [ "Mais il y eut un ", " d'entre les pharisiens, nommé ", ", un chef des ", "," ]
+            [ "homme", "Nicodème", "Juifs" ]
+        )
+    , Verse
+        "Timothée 2:15"
+        "Efforce-toi de te présenter devant Dieu comme un homme éprouvé, un ouvrier qui n'a point à rougir, qui dispense droitement la parole de la vérité."
+        (TextWithHoles
+            [ "Efforce-toi de te présenter devant ", " comme un homme éprouvé, un ouvrier qui n'a point à rougir, qui dispense ", " la parole de la ", "." ]
+            [ "Dieu", "droitement", "vérité" ]
+        )
+    , Verse
+        "Matthieu 6:33"
+        "Cherchez premièrement le royaume et la justice de Dieu; et toutes ces choses vous seront données par-dessus."
+        (TextWithHoles
+            [ "Cherchez premièrement le ", " et la ", " de Dieu; et toutes ces choses vous seront ", " par-dessus." ]
+            [ "royaume", "justice", "données" ]
+        )
+    , Verse
+        "Jean 14:16"
+        "Et moi, je prierai le Père, et il vous donnera un autre consolateur, afin qu'il demeure éternellement avec vous,"
+        (TextWithHoles
+            [ "Et moi, je prierai le ", ", et il vous donnera un autre ", ", afin qu'il demeure ", " avec vous," ]
+            [ "Père", "consolateur", "éternellement" ]
+        )
+    , Verse
+        "Hébreux 12:1"
+        "Nous donc aussi, puisque nous sommes environnés d'une si grande nuée de témoins, rejetons tout fardeau, et le péché qui nous enveloppe si facilement, et courons avec persévérance dans la carrière qui nous est ouverte,"
+        (TextWithHoles
+            [ "Nous donc aussi, puisque nous sommes environnés d'une si grande nuée de ", ", rejetons tout fardeau, et le péché qui nous enveloppe si facilement, et courons avec ", " dans la carrière qui nous est ", "," ]
+            [ "témoins", "persévérance", "ouverte" ]
+        )
+    , Verse
+        "Jean 4:24"
+        "Dieu est Esprit, et il faut que ceux qui l'adorent l'adorent en esprit et en vérité."
+        (TextWithHoles
+            [ "Dieu est ", ", et il faut que ceux qui l'", " l'adorent en esprit et en ", "." ]
+            [ "Esprit", "adorent", "vérité" ]
+        )
+    , Verse
+        "Ésaïe 7:14"
+        "C'est pourquoi le Seigneur lui-même vous donnera un signe, Voici, la jeune fille deviendra enceinte, elle enfantera un fils, Et elle lui donnera le nom d'Emmanuel."
+        (TextWithHoles
+            [ "C'est pourquoi le ", " lui-même vous donnera un signe, Voici, la jeune fille deviendra ", ", elle enfantera un fils, Et elle lui donnera le nom d'", "." ]
+            [ "Seigneur", "enceinte", "Emmanuel" ]
+        )
+    , Verse
+        "Philippiens 2:5"
+        "Ayez en vous les sentiments qui étaient en Jésus Christ,"
+        (TextWithHoles
+            [ "Ayez en ", " les ", " qui étaient en ", " Christ," ]
+            [ "vous", "sentiments", "Jésus" ]
+        )
+    , Verse
+        "Actes 20:28"
+        "Prenez donc garde à vous-mêmes, et à tout le troupeau sur lequel le Saint Esprit vous a établis évêques, pour paître l'Église du Seigneur, qu'il s'est acquise par son propre sang."
+        (TextWithHoles
+            [ "Prenez donc garde à vous-mêmes, et à tout le ", " sur lequel le Saint Esprit vous a établis évêques, pour paître l'Église du ", ", qu'il s'est acquise par son propre ", "." ]
+            [ "troupeau", "Seigneur", "sang" ]
+        )
+    , Verse
+        "Romains 10:13"
+        "Car quiconque invoquera le nom du Seigneur sera sauvé."
+        (TextWithHoles
+            [ "Car ", " invoquera le nom du ", " sera ", "." ]
+            [ "quiconque", "Seigneur", "sauvé" ]
+        )
+    , Verse
+        "Jean 14:15"
+        "Si vous m'aimez, gardez mes commandements."
+        (TextWithHoles
+            [ "Si vous m'", ", ", " mes ", "." ]
+            [ "aimez", "gardez", "commandements" ]
+        )
+    , Verse
+        "Romains 1:18"
+        "La colère de Dieu se révèle du ciel contre toute impiété et toute injustice des hommes qui retiennent injustement la vérité captive,"
+        (TextWithHoles
+            [ "La colère de ", " se révèle du ciel contre toute impiété et toute ", " des hommes qui retiennent injustement la ", " captive," ]
+            [ "Dieu", "injustice", "vérité" ]
+        )
+    , Verse
+        "Genèse 1:2"
+        "La terre était informe et vide: il y avait des ténèbres à la surface de l'abîme, et l'esprit de Dieu se mouvait au-dessus des eaux."
+        (TextWithHoles
+            [ "La ", " était informe et vide: il y avait des ténèbres à la ", " de l'abîme, et l'esprit de ", " se mouvait au-dessus des eaux." ]
+            [ "terre", "surface", "Dieu" ]
+        )
+    , Verse
+        "Luc 4:18"
+        "L'Esprit du Seigneur est sur moi, Parce qu'il m'a oint pour annoncer une bonne nouvelle aux pauvres; Il m'a envoyé pour guérir ceux qui ont le coeur brisé, Pour proclamer aux captifs la délivrance, Et aux aveugles le recouvrement de la vue, Pour renvoyer libres les opprimés,"
+        (TextWithHoles
+            [ "L'Esprit du ", " est sur moi, Parce qu'il m'a oint pour annoncer une bonne ", " aux pauvres; Il m'a envoyé pour guérir ceux qui ont le coeur brisé, Pour proclamer aux captifs la ", ", Et aux aveugles le recouvrement de la vue, Pour renvoyer libres les opprimés," ]
+            [ "Seigneur", "nouvelle", "délivrance" ]
+        )
+    , Verse
+        "Jean 3:5"
+        "Jésus répondit: En vérité, en vérité, je te le dis, si un homme ne naît d'eau et d'Esprit, il ne peut entrer dans le royaume de Dieu."
+        (TextWithHoles
+            [ "Jésus répondit: En ", ", en vérité, je te le dis, si un homme ne naît d'eau et d'", ", il ne peut entrer dans le royaume de ", "." ]
+            [ "vérité", "Esprit", "Dieu" ]
+        )
+    , Verse
+        "Jean 4:1"
+        "Le Seigneur sut que les pharisiens avaient appris qu'il faisait et baptisait plus de disciples que Jean."
+        (TextWithHoles
+            [ "Le Seigneur sut que les ", " avaient appris qu'il faisait et ", " plus de disciples que ", "." ]
+            [ "pharisiens", "baptisait", "Jean" ]
+        )
+    , Verse
+        "Hébreux 11:1"
+        "Or la foi est une ferme assurance des choses qu'on espère, une démonstration de celles qu'on ne voit pas."
+        (TextWithHoles
+            [ "Or la foi est une ferme ", " des choses qu'on ", ", une ", " de celles qu'on ne voit pas." ]
+            [ "assurance", "espère", "démonstration" ]
+        )
+    , Verse
+        "Deutéronome 6:4"
+        "Écoute, Israël! l'Éternel, notre Dieu, est le seul Éternel."
+        (TextWithHoles
+            [ "Écoute, ", "! l'Éternel, notre ", ", est le seul ", "." ]
+            [ "Israël", "Dieu", "Éternel" ]
+        )
+    , Verse
+        "Jean 8:32"
+        "vous connaîtrez la vérité, et la vérité vous affranchira."
+        (TextWithHoles
+            [ "vous ", " la vérité, et la ", " vous ", "." ]
+            [ "connaîtrez", "vérité", "affranchira" ]
+        )
+    , Verse
+        "Hébreux 4:12"
+        "Car la parole de Dieu est vivante et efficace, plus tranchante qu'une épée quelconque à deux tranchants, pénétrante jusqu'à partager âme et esprit, jointures et moelles; elle juge les sentiments et les pensées du coeur."
+        (TextWithHoles
+            [ "Car la parole de Dieu est ", " et efficace, plus tranchante qu'une épée quelconque à deux tranchants, pénétrante jusqu'à partager âme et ", ", jointures et moelles; elle juge les sentiments et les ", " du coeur." ]
+            [ "vivante", "esprit", "pensées" ]
+        )
+    , Verse
+        "Jacques 5:16"
+        "Confessez donc vos péchés les uns aux autres, et priez les uns pour les autres, afin que vous soyez guéris. La prière fervente du juste a une grande efficace."
+        (TextWithHoles
+            [ "Confessez donc vos ", " les uns aux autres, et priez les uns pour les autres, afin que vous soyez ", ". La prière ", " du juste a une grande efficace." ]
+            [ "péchés", "guéris", "fervente" ]
+        )
+    , Verse
+        "Jean 1:29"
+        "Le lendemain, il vit Jésus venant à lui, et il dit: Voici l'Agneau de Dieu, qui ôte le péché du monde."
+        (TextWithHoles
+            [ "Le lendemain, il vit ", " venant à lui, et il dit: Voici l'", " de Dieu, qui ôte le péché du ", "." ]
+            [ "Jésus", "Agneau", "monde" ]
+        )
+    , Verse
+        "Éphésiens 2:1"
+        "Vous étiez morts par vos offenses et par vos péchés,"
+        (TextWithHoles
+            [ "Vous étiez ", " par vos ", " et par vos ", "," ]
+            [ "morts", "offenses", "péchés" ]
+        )
+    , Verse
+        "Jean 16:13"
+        "Quand le consolateur sera venu, l'Esprit de vérité, il vous conduira dans toute la vérité; car il ne parlera pas de lui-même, mais il dira tout ce qu'il aura entendu, et il vous annoncera les choses à venir."
+        (TextWithHoles
+            [ "Quand le ", " sera venu, l'Esprit de vérité, il vous conduira dans toute la ", "; car il ne parlera pas de lui-même, mais il dira tout ce qu'il aura entendu, et il vous ", " les choses à venir." ]
+            [ "consolateur", "vérité", "annoncera" ]
+        )
+    , Verse
+        "Romains 13:1"
+        "Que toute personne soit soumise aux autorités supérieures; car il n'y a point d'autorité qui ne vienne de Dieu, et les autorités qui existent ont été instituées de Dieu."
+        (TextWithHoles
+            [ "Que toute personne soit soumise aux ", " supérieures; car il n'y a point d'autorité qui ne vienne de ", ", et les autorités qui existent ont été ", " de Dieu." ]
+            [ "autorités", "Dieu", "instituées" ]
+        )
+    , Verse
+        "Matthieu 16:18"
+        "Et moi, je te dis que tu es Pierre, et que sur cette pierre je bâtirai mon Église, et que les portes du séjour des morts ne prévaudront point contre elle."
+        (TextWithHoles
+            [ "Et moi, je te dis que tu es ", ", et que sur cette pierre je bâtirai mon ", ", et que les portes du séjour des morts ne ", " point contre elle." ]
+            [ "Pierre", "Église", "prévaudront" ]
+        )
+    , Verse
+        "Matthieu 25:31"
+        "Lorsque le Fils de l'homme viendra dans sa gloire, avec tous les anges, il s'assiéra sur le trône de sa gloire."
+        (TextWithHoles
+            [ "Lorsque le ", " de l'homme viendra dans sa gloire, avec tous les ", ", il s'assiéra sur le trône de sa ", "." ]
+            [ "Fils", "anges", "gloire" ]
+        )
+    , Verse
+        "Genèse 3:15"
+        "Je mettrai inimitié entre toi et la femme, entre ta postérité et sa postérité: celle-ci t'écrasera la tête, et tu lui blesseras le talon."
+        (TextWithHoles
+            [ "Je mettrai ", " entre toi et la femme, entre ta postérité et sa ", ": celle-ci t'écrasera la tête, et tu lui blesseras le ", "." ]
+            [ "inimitié", "postérité", "talon" ]
+        )
+    , Verse
+        "Jean 1:3"
+        "Toutes choses ont été faites par elle, et rien de ce qui a été fait n'a été fait sans elle."
+        (TextWithHoles
+            [ "Toutes ", " ont été faites par elle, et rien de ce qui a été ", " n'a été fait sans ", "." ]
+            [ "choses", "fait", "elle" ]
+        )
+    , Verse
+        "Actes 17:11"
+        "Ces Juifs avaient des sentiments plus nobles que ceux de Thessalonique; ils reçurent la parole avec beaucoup d'empressement, et ils examinaient chaque jour les Écritures, pour voir si ce qu'on leur disait était exact."
+        (TextWithHoles
+            [ "Ces Juifs avaient des ", " plus nobles que ceux de Thessalonique; ils reçurent la ", " avec beaucoup d'empressement, et ils examinaient chaque jour les Écritures, pour voir si ce qu'on leur disait était ", "." ]
+            [ "sentiments", "parole", "exact" ]
+        )
+    , Verse
+        "Jean 14:26"
+        "Mais le consolateur, l'Esprit Saint, que le Père enverra en mon nom, vous enseignera toutes choses, et vous rappellera tout ce que je vous ai dit."
+        (TextWithHoles
+            [ "Mais le ", ", l'Esprit Saint, que le Père enverra en mon nom, vous ", " toutes choses, et vous rappellera tout ce que je vous ai ", "." ]
+            [ "consolateur", "enseignera", "dit" ]
+        )
+    , Verse
+        "Jean 8:44"
+        "Vous avez pour père le diable, et vous voulez accomplir les désirs de votre père. Il a été meurtrier dès le commencement, et il ne se tient pas dans la vérité, parce qu'il n'y a pas de vérité en lui. Lorsqu'il profère le mensonge, il parle de son propre fonds; car il est menteur et le père du mensonge."
+        (TextWithHoles
+            [ "Vous avez pour père le ", ", et vous voulez accomplir les désirs de votre père. Il a été ", " dès le commencement, et il ne se tient pas dans la vérité, parce qu'il n'y a pas de vérité en lui. Lorsqu'il profère le mensonge, il parle de son propre fonds; car il est menteur et le père du ", "." ]
+            [ "diable", "meurtrier", "mensonge" ]
+        )
+    , Verse
+        "Jean 1:7"
+        "Il vint pour servir de témoin, pour rendre témoignage à la lumière, afin que tous crussent par lui."
+        (TextWithHoles
+            [ "Il vint pour servir de ", ", pour rendre témoignage à la ", ", afin que tous ", " par lui." ]
+            [ "témoin", "lumière", "crussent" ]
+        )
+    , Verse
+        "Tite 2:11"
+        "Car la grâce de Dieu, source de salut pour tous les hommes, a été manifestée."
+        (TextWithHoles
+            [ "Car la grâce de ", ", source de ", " pour tous les ", ", a été manifestée." ]
+            [ "Dieu", "salut", "hommes" ]
+        )
+    , Verse
+        "Matthieu 5:17"
+        "Ne croyez pas que je sois venu pour abolir la loi ou les prophètes; je suis venu non pour abolir, mais pour accomplir."
+        (TextWithHoles
+            [ "Ne croyez pas que je sois venu pour abolir la ", " ou les prophètes; je suis venu non pour ", ", mais pour ", "." ]
+            [ "loi", "abolir", "accomplir" ]
+        )
+    , Verse
+        "Éphésiens 6:10"
+        "Au reste, fortifiez-vous dans le Seigneur, et par sa force toute-puissante."
+        (TextWithHoles
+            [ "Au reste, ", "-vous dans le ", ", et par sa ", " toute-puissante." ]
+            [ "fortifiez", "Seigneur", "force" ]
+        )
+    , Verse
+        "Matthieu 22:37"
+        "Jésus lui répondit: Tu aimeras le Seigneur, ton Dieu, de tout ton coeur, de toute ton âme, et de toute ta pensée."
+        (TextWithHoles
+            [ "Jésus lui répondit: Tu aimeras le ", ", ton ", ", de tout ton coeur, de toute ton âme, et de toute ta ", "." ]
+            [ "Seigneur", "Dieu", "pensée" ]
+        )
+    , Verse
+        "Colossiens 1:15"
+        "Il est l'image du Dieu invisible, le premier-né de toute la création."
+        (TextWithHoles
+            [ "Il est l'image du ", " invisible, le ", "-né de toute la ", "." ]
+            [ "Dieu", "premier", "création" ]
+        )
+    , Verse
+        "Jean 15:5"
+        "Je suis le cep, vous êtes les sarments. Celui qui demeure en moi et en qui je demeure porte beaucoup de fruit, car sans moi vous ne pouvez rien faire."
+        (TextWithHoles
+            [ "Je suis le cep, vous êtes les ", ". Celui qui demeure en moi et en qui je demeure porte beaucoup de ", ", car sans moi vous ne pouvez rien ", "." ]
+            [ "sarments", "fruit", "faire" ]
+        )
+    , Verse
+        "Jean 5:24"
+        "En vérité, en vérité, je vous le dis, celui qui écoute ma parole, et qui croit à celui qui m'a envoyé, a la vie éternelle et ne vient point en jugement, mais il est passé de la mort à la vie."
+        (TextWithHoles
+            [ "En ", ", en vérité, je vous le dis, celui qui écoute ma ", ", et qui croit à celui qui m'a envoyé, a la vie éternelle et ne vient point en jugement, mais il est passé de la mort à la ", "." ]
+            [ "vérité", "parole", "vie" ]
+        )
+    , Verse
+        "Joël 2:28"
+        "Après cela, je répandrai mon esprit sur toute chair; Vos fils et vos filles prophétiseront, Vos vieillards auront des songes, Et vos jeunes gens des visions."
+        (TextWithHoles
+            [ "Après cela, je répandrai mon ", " sur toute chair; Vos fils et vos filles ", ", Vos vieillards auront des songes, Et vos jeunes gens des ", "." ]
+            [ "esprit", "prophétiseront", "visions" ]
+        )
+    , Verse
+        "Philippiens 4:8"
+        "Au reste, frères, que tout ce qui est vrai, tout ce qui est honorable, tout ce qui est juste, tout ce qui est pur, tout ce qui est aimable, tout ce qui mérite l'approbation, ce qui est vertueux et digne de louange, soit l'objet de vos pensées."
+        (TextWithHoles
+            [ "Au reste, frères, que tout ce qui est ", ", tout ce qui est honorable, tout ce qui est juste, tout ce qui est pur, tout ce qui est aimable, tout ce qui mérite l'", ", ce qui est vertueux et digne de louange, soit l'objet de vos ", "." ]
+            [ "vrai", "approbation", "pensées" ]
+        )
+    , Verse
+        "Hébreux 11:6"
+        "Or sans la foi il est impossible de lui être agréable; car il faut que celui qui s'approche de Dieu croie que Dieu existe, et qu'il est le rémunérateur de ceux qui le cherchent."
+        (TextWithHoles
+            [ "Or sans la ", " il est ", " de lui être agréable; car il faut que celui qui s'approche de Dieu croie que ", " existe, et qu'il est le rémunérateur de ceux qui le cherchent." ]
+            [ "foi", "impossible", "Dieu" ]
+        )
+    , Verse
+        "Tite 2:13"
+        "en attendant la bienheureuse espérance, et la manifestation de la gloire du grand Dieu et de notre Sauveur Jésus Christ,"
+        (TextWithHoles
+            [ "en attendant la ", " espérance, et la manifestation de la ", " du grand Dieu et de notre ", " Jésus Christ," ]
+            [ "bienheureuse", "gloire", "Sauveur" ]
+        )
+    , Verse
+        "Romains 10:17"
+        "Ainsi la foi vient de ce qu'on entend, et ce qu'on entend vient de la parole de Christ."
+        (TextWithHoles
+            [ "Ainsi la ", " vient de ce qu'on entend, et ce qu'on ", " vient de la parole de ", "." ]
+            [ "foi", "entend", "Christ" ]
+        )
+    , Verse
+        "Michée 6:8"
+        "On t'a fait connaître, ô homme, ce qui est bien; Et ce que l'Éternel demande de toi, C'est que tu pratiques la justice, Que tu aimes la miséricorde, Et que tu marches humblement avec ton Dieu."
+        (TextWithHoles
+            [ "On t'a fait connaître, ô ", ", ce qui est bien; Et ce que l'Éternel demande de toi, C'est que tu pratiques la ", ", Que tu aimes la miséricorde, Et que tu marches ", " avec ton Dieu." ]
+            [ "homme", "justice", "humblement" ]
+        )
+    , Verse
+        "Jean 2:15"
+        "Ayant fait un fouet avec des cordes, il les chassa tous du temple, ainsi que les brebis et les boeufs; il dispersa la monnaie des changeurs, et renversa les tables;"
+        (TextWithHoles
+            [ "Ayant fait un fouet avec des ", ", il les chassa tous du ", ", ainsi que les brebis et les boeufs; il dispersa la ", " des changeurs, et renversa les tables;" ]
+            [ "cordes", "temple", "monnaie" ]
+        )
+    , Verse
+        "Genèse 3:1"
+        "Le serpent était le plus rusé de tous les animaux des champs, que l'Éternel Dieu avait faits. Il dit à la femme: Dieu a-t-il réellement dit: Vous ne mangerez pas de tous les arbres du jardin?"
+        (TextWithHoles
+            [ "Le ", " était le plus rusé de tous les animaux des champs, que l'Éternel Dieu avait faits. Il dit à la ", ": Dieu a-t-il réellement dit: Vous ne mangerez pas de tous les arbres du ", "?" ]
+            [ "serpent", "femme", "jardin" ]
+        )
+    , Verse
+        "Proverbes 22:6"
+        "Instruis l'enfant selon la voie qu'il doit suivre; Et quand il sera vieux, il ne s'en détournera pas."
+        (TextWithHoles
+            [ "Instruis l'", " selon la voie qu'il doit suivre; Et quand il sera ", ", il ne s'en ", " pas." ]
+            [ "enfant", "vieux", "détournera" ]
+        )
+    , Verse
+        "Jacques 1:2"
+        "Mes frères, regardez comme un sujet de joie complète les diverses épreuves auxquelles vous pouvez être exposés,"
+        (TextWithHoles
+            [ "Mes ", ", regardez comme un sujet de ", " complète les diverses ", " auxquelles vous pouvez être exposés," ]
+            [ "frères", "joie", "épreuves" ]
+        )
+    , Verse
+        "Actes 2:4"
+        "Et ils furent tous remplis du Saint Esprit, et se mirent à parler en d'autres langues, selon que l'Esprit leur donnait de s'exprimer."
+        (TextWithHoles
+            [ "Et ils furent tous ", " du Saint Esprit, et se mirent à parler en d'autres ", ", selon que l'", " leur donnait de s'exprimer." ]
+            [ "remplis", "langues", "Esprit" ]
+        )
+    , Verse
+        "Marc 16:16"
+        "Celui qui croira et qui sera baptisé sera sauvé, mais celui qui ne croira pas sera condamné."
+        (TextWithHoles
+            [ "Celui qui ", " et qui sera ", " sera sauvé, mais celui qui ne croira pas sera ", "." ]
+            [ "croira", "baptisé", "condamné" ]
+        )
+    , Verse
+        "Romains 3:10"
+        "selon qu'il est écrit: Il n'y a point de juste, Pas même un seul;"
+        (TextWithHoles
+            [ "selon qu'il est ", ": Il n'y a point de ", ", Pas même un ", ";" ]
+            [ "écrit", "juste", "seul" ]
         )
     ]
