@@ -1,6 +1,4 @@
-module Verses exposing (Datasets, TextWithHoles, Verse, datasets, verseList)
-
-import Dict
+module Verses exposing (Dataset, Datasets, TextWithHoles, Verse, datasets, verseList)
 
 
 type alias Reference =
@@ -20,8 +18,12 @@ type alias TextWithHoles =
     }
 
 
+type alias Dataset =
+    ( String, List Verse )
+
+
 type alias Datasets =
-    List ( String, List Verse )
+    List Dataset
 
 
 datasets : Datasets

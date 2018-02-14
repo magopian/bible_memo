@@ -37,28 +37,13 @@ type alias Flags =
 
 init : Flags -> ( Model, Cmd Msg )
 init { initialSeed } =
-    let
-        seed0 =
-            Random.initialSeed initialSeed
-
-        ( shuffledVerseList, seed1 ) =
-            shuffleList Verses.verseList seed0
-
-        ( verse, remainingVerseList ) =
-            pickVerse shuffledVerseList
-
-        ( shuffledVerse, seed2 ) =
-            shuffleVerseWords verse seed1
-    in
-        ( { verseData =
-                VerseData
-                    shuffledVerse
-                    remainingVerseList
-          , wordChoices = Dict.empty
-          , seed = seed2
-          }
-        , Task.attempt Focused (Dom.focus "select-0")
-        )
+    ( { verseData =
+            Unknown
+      , wordChoices = Dict.empty
+      , seed = Random.initialSeed initialSeed
+      }
+    , Cmd.none
+    )
 
 
 shuffleList : List a -> Random.Seed -> ( List a, Random.Seed )
@@ -99,11 +84,28 @@ type Msg
     = WordChosen Int String
     | NextVerse
     | Focused (Result Dom.Error ())
+    | DatasetChosen Verses.Dataset
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        DatasetChosen ( title, verseList ) ->
+            let
+                ( shuffledVerseList, seed ) =
+                    shuffleList verseList model.seed
+
+                ( newVerse, remainingVerseList, newSeed ) =
+                    pickAndShuffle shuffledVerseList seed
+            in
+                ( { model
+                    | verseData = VerseData newVerse remainingVerseList
+                    , wordChoices = Dict.empty
+                    , seed = newSeed
+                  }
+                , Task.attempt Focused (Dom.focus "select-0")
+                )
+
         WordChosen selectNumber wordChosen ->
             ( { model
                 | wordChoices =
@@ -122,14 +124,11 @@ update msg model =
                         fullList =
                             verseList ++ [ verse ]
 
-                        ( newVerse, remainingVerseList ) =
-                            pickVerse fullList
-
-                        ( shuffledVerse, newSeed ) =
-                            shuffleVerseWords newVerse model.seed
+                        ( newVerse, remainingVerseList, newSeed ) =
+                            pickAndShuffle fullList model.seed
                     in
                         ( { model
-                            | verseData = VerseData shuffledVerse remainingVerseList
+                            | verseData = VerseData newVerse remainingVerseList
                             , wordChoices = Dict.empty
                             , seed = newSeed
                           }
@@ -138,6 +137,18 @@ update msg model =
 
         Focused _ ->
             ( model, Cmd.none )
+
+
+pickAndShuffle : List Verses.Verse -> Random.Seed -> ( Verses.Verse, List Verses.Verse, Random.Seed )
+pickAndShuffle verseList seed =
+    let
+        ( newVerse, remainingVerseList ) =
+            pickVerse verseList
+
+        ( shuffledVerse, newSeed ) =
+            shuffleVerseWords newVerse seed
+    in
+        ( shuffledVerse, remainingVerseList, newSeed )
 
 
 
@@ -170,7 +181,16 @@ viewDataSets : Verses.Datasets -> Html.Html Msg
 viewDataSets datasets =
     Html.ul []
         (datasets
-            |> List.map (\( title, _ ) -> Html.li [] [ Html.text title ])
+            |> List.map
+                (\( title, verselist ) ->
+                    Html.li []
+                        [ Html.a
+                            [ Html.Attributes.href "#"
+                            , Html.Events.onClick <| DatasetChosen ( title, verselist )
+                            ]
+                            [ Html.text title ]
+                        ]
+                )
         )
 
 
