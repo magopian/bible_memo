@@ -19,9 +19,13 @@ type alias WordChoices =
     Dict.Dict Int String
 
 
+type Dataset
+    = Unknown
+    | VerseData Verses.Verse (List Verses.Verse)
+
+
 type alias Model =
-    { verse : Verses.Verse
-    , verseList : List Verses.Verse
+    { verseData : Dataset
     , wordChoices : WordChoices
     , seed : Random.Seed
     }
@@ -46,8 +50,10 @@ init { initialSeed } =
         ( shuffledVerse, seed2 ) =
             shuffleVerseWords verse seed1
     in
-        ( { verse = shuffledVerse
-          , verseList = remainingVerseList
+        ( { verseData =
+                VerseData
+                    shuffledVerse
+                    remainingVerseList
           , wordChoices = Dict.empty
           , seed = seed2
           }
@@ -107,24 +113,28 @@ update msg model =
             )
 
         NextVerse ->
-            let
-                fullList =
-                    model.verseList ++ [ model.verse ]
+            case model.verseData of
+                Unknown ->
+                    ( model, Cmd.none )
 
-                ( verse, remainingVerseList ) =
-                    pickVerse fullList
+                VerseData verse verseList ->
+                    let
+                        fullList =
+                            verseList ++ [ verse ]
 
-                ( shuffledVerse, newSeed ) =
-                    shuffleVerseWords verse model.seed
-            in
-                ( { model
-                    | verse = shuffledVerse
-                    , verseList = remainingVerseList
-                    , wordChoices = Dict.empty
-                    , seed = newSeed
-                  }
-                , Task.attempt Focused (Dom.focus "select-0")
-                )
+                        ( newVerse, remainingVerseList ) =
+                            pickVerse fullList
+
+                        ( shuffledVerse, newSeed ) =
+                            shuffleVerseWords newVerse model.seed
+                    in
+                        ( { model
+                            | verseData = VerseData shuffledVerse remainingVerseList
+                            , wordChoices = Dict.empty
+                            , seed = newSeed
+                          }
+                        , Task.attempt Focused (Dom.focus "select-0")
+                        )
 
         Focused _ ->
             ( model, Cmd.none )
@@ -136,10 +146,17 @@ update msg model =
 
 view : Model -> Html.Html Msg
 view model =
-    Html.div []
-        [ viewVerse model.verse model.wordChoices
-        , viewResult model.verse model.wordChoices
-        ]
+    case model.verseData of
+        Unknown ->
+            Html.div []
+                -- TODO: display a list of datasets to choose from
+                [ Html.text "No data set chosen yet, pick one" ]
+
+        VerseData verse verseList ->
+            Html.div []
+                [ viewVerse verse model.wordChoices
+                , viewResult verse model.wordChoices
+                ]
 
 
 viewVerse : Verses.Verse -> WordChoices -> Html.Html Msg
