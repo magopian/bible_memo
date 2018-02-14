@@ -1,4 +1,6 @@
-module Verses exposing (TextWithHoles, Verse, verseList)
+module Verses exposing (Datasets, TextWithHoles, Verse, datasets, verseList)
+
+import Dict
 
 
 type alias Reference =
@@ -16,6 +18,29 @@ type alias TextWithHoles =
     { text : List String
     , words : List String
     }
+
+
+type alias Datasets =
+    List ( String, List Verse )
+
+
+datasets : Datasets
+datasets =
+    [ ( "french", frenchVerseList )
+    , ( "english", verseList )
+    ]
+
+
+frenchVerseList : List Verse
+frenchVerseList =
+    [ Verse
+        "Jean 3:16"
+        "En effet, Dieu a tant aimé le monde qu'il a donné son Fils unique afin que quiconque croit en lui ne périsse pas mais ait la vie éternelle."
+        (TextWithHoles
+            [ "En effet, ", " a tant aimé le ", " qu'il a donné son ", " unique afin que quiconque croit en lui ne périsse pas mais ait la ", " éternelle." ]
+            [ "Dieu", "monde", "Fils", "vie" ]
+        )
+    ]
 
 
 verseList : List Verse

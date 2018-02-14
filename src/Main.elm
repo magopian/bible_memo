@@ -19,13 +19,13 @@ type alias WordChoices =
     Dict.Dict Int String
 
 
-type Dataset
+type ChosenDataset
     = Unknown
     | VerseData Verses.Verse (List Verses.Verse)
 
 
 type alias Model =
-    { verseData : Dataset
+    { verseData : ChosenDataset
     , wordChoices : WordChoices
     , seed : Random.Seed
     }
@@ -146,17 +146,32 @@ update msg model =
 
 view : Model -> Html.Html Msg
 view model =
-    case model.verseData of
-        Unknown ->
-            Html.div []
-                -- TODO: display a list of datasets to choose from
-                [ Html.text "No data set chosen yet, pick one" ]
+    let
+        content =
+            case model.verseData of
+                Unknown ->
+                    Html.div []
+                        [ Html.text "No data set chosen yet, pick one below"
+                        ]
 
-        VerseData verse verseList ->
-            Html.div []
-                [ viewVerse verse model.wordChoices
-                , viewResult verse model.wordChoices
-                ]
+                VerseData verse verseList ->
+                    Html.div []
+                        [ viewVerse verse model.wordChoices
+                        , viewResult verse model.wordChoices
+                        ]
+    in
+        Html.div []
+            [ content
+            , viewDataSets Verses.datasets
+            ]
+
+
+viewDataSets : Verses.Datasets -> Html.Html Msg
+viewDataSets datasets =
+    Html.ul []
+        (datasets
+            |> List.map (\( title, _ ) -> Html.li [] [ Html.text title ])
+        )
 
 
 viewVerse : Verses.Verse -> WordChoices -> Html.Html Msg
