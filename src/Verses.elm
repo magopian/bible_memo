@@ -1204,9 +1204,9 @@ frenchVerseList =
         )
     , Verse
         "Jacques 5:16"
-        "Confessez donc vos péchés les uns aux autres, et priez les uns pour les autres, afin que vous soyez guéris. La prière fervente du juste a une grande efficace."
+        "Confessez donc vos péchés les uns aux autres, et priez les uns pour les autres, afin que vous soyez guéris. La prière fervente du juste a une grande efficacité."
         (TextWithHoles
-            [ "Confessez donc vos ", " les uns aux autres, et priez les uns pour les autres, afin que vous soyez ", ". La prière ", " du juste a une grande efficace." ]
+            [ "Confessez donc vos ", " les uns aux autres, et priez les uns pour les autres, afin que vous soyez ", ". La prière ", " du juste a une grande efficacité." ]
             [ "péchés", "guéris", "fervente" ]
         )
     , Verse
