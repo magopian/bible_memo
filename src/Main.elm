@@ -216,16 +216,9 @@ viewVerse { reference, withHoles } wordChoices =
 viewResult : Verses.Verse -> WordChoices -> Html.Html Msg
 viewResult { text, withHoles } wordChoices =
     let
-        words =
-            Dict.toList wordChoices
-                |> List.sort
-                |> List.map (\( _, word ) -> word)
-
-        textParts =
-            zipLists withHoles.text words
-
         reconstituded =
-            String.join "" textParts
+            reconstituteVerse withHoles.text
+                wordChoices
     in
         Html.div []
             [ if reconstituded == text then
@@ -238,6 +231,20 @@ viewResult { text, withHoles } wordChoices =
                 ]
                 [ Html.text "display another verse" ]
             ]
+
+
+reconstituteVerse : List String -> WordChoices -> String
+reconstituteVerse withHoles wordChoices =
+    let
+        words =
+            Dict.toList wordChoices
+                |> List.sort
+                |> List.map (\( _, word ) -> word)
+
+        textParts =
+            zipLists withHoles words
+    in
+        String.join "" textParts
 
 
 zipLists : List a -> List a -> List a
