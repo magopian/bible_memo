@@ -13,33 +13,37 @@ import Verses exposing (datasets)
 all : Test
 all =
     describe "Verses"
-        [ test "are correctly split into 'with holes' and words to be chosen" <|
-            \_ ->
-                let
-                    -- List of all the (verse text, reconstituded verse text)
-                    data : List ( String, String )
-                    data =
-                        datasets
-                            |> List.concatMap
-                                (\( _, verses ) ->
-                                    verses
-                                        |> List.map
-                                            (\{ text, withHoles } ->
-                                                let
-                                                    wordChoices =
-                                                        withHoles.words
-                                                            |> List.indexedMap (,)
-                                                            |> Dict.fromList
+        (datasets
+            |> List.map
+                (\( title, dataset ) ->
+                    -- One "describe" test set for each dataset (french, english...)
+                    describe (title ++ " verses") <|
+                        let
+                            -- List of all the (verse text, reconstituded verse text)
+                            data : List ( String, String, String )
+                            data =
+                                dataset
+                                    |> List.map
+                                        (\{ reference, text, withHoles } ->
+                                            let
+                                                wordChoices =
+                                                    withHoles.words
+                                                        |> List.indexedMap (,)
+                                                        |> Dict.fromList
 
-                                                    reconstituded =
-                                                        reconstituteVerse withHoles.text wordChoices
-                                                in
-                                                    ( text, reconstituded )
-                                            )
-                                )
-                in
-                    data
-                        |> List.map (\( verseText, reconstituded ) -> verseText == reconstituded)
-                        |> List.all identity
-                        |> Expect.true "All verses reconstitute properly"
-        ]
+                                                reconstituted =
+                                                    reconstituteVerse withHoles.text wordChoices
+                                            in
+                                                ( reference, text, reconstituted )
+                                        )
+                        in
+                            data
+                                |> List.map
+                                    (\( reference, verseText, reconstituted ) ->
+                                        -- One test for each verse
+                                        test ("The verse " ++ reference ++ " reconstitutes properly") <|
+                                            \_ ->
+                                                Expect.equal verseText reconstituted
+                                    )
+                )
+        )

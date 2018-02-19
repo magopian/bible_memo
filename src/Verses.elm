@@ -162,7 +162,7 @@ englishVerseList =
             [ "crucified", "live", "body", "faith", "himself" ]
         )
     , Verse
-        "1 John 1:"
+        "1 John 1:9"
         "If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness."
         (TextWithHoles
             [ "If we ", " our sins, he is ", " and just and will ", " us our sins and purify us from all ", "." ]
@@ -923,7 +923,7 @@ frenchVerseList =
             [ "fatigués", "chargés", "repos" ]
         )
     , Verse
-        "Jean 1:9"
+        "1 Jean 1:9"
         "Si nous confessons nos péchés, il est fidèle et juste pour nous les pardonner, et pour nous purifier de toute iniquité."
         (TextWithHoles
             [ "Si nous ", " nos péchés, il est fidèle et juste pour nous les ", ", et pour nous ", " de toute iniquité." ]
