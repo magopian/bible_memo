@@ -5,7 +5,6 @@ import Dom
 import Html
 import Html.Attributes
 import Html.Events
-import Json.Decode
 import Random
 import Random.List
 import Task
@@ -82,6 +81,7 @@ shuffleVerseWords verse seed =
 
 type Msg
     = WordChosen String
+    | WordRemoved Int
     | NextVerse
     | Focused (Result Dom.Error ())
     | DatasetChosen Verses.Dataset
@@ -140,6 +140,13 @@ update msg model =
                           }
                         , Cmd.none
                         )
+
+        WordRemoved index ->
+            ( { model
+                | wordChoices = Dict.remove index model.wordChoices
+              }
+            , Cmd.none
+            )
 
         NextVerse ->
             case model.verseData of
@@ -230,18 +237,32 @@ viewVerse { reference, withHoles } wordChoices =
             -- Make all the "text with holes" parts into Html.text nodes
             List.map Html.text withHoles.text
 
-        placeholderOrWord : Maybe String -> Html.Html Msg
-        placeholderOrWord maybeWord =
+        placeholderOrWord : Maybe String -> Int -> Html.Html Msg
+        placeholderOrWord maybeWord index =
             case maybeWord of
                 Nothing ->
-                    Html.span [ Html.Attributes.style [ ( "display", "inline-block" ), ( "min-width", "2em" ), ( "border-bottom", "1px solid" ) ] ] []
+                    Html.span
+                        [ Html.Attributes.style
+                            [ ( "display", "inline-block" )
+                            , ( "min-width", "2em" )
+                            , ( "border-bottom", "1px solid" )
+                            ]
+                        ]
+                        []
 
                 Just word ->
-                    Html.span [ Html.Attributes.style [ ( "border-bottom", "1px solid" ) ] ] [ Html.text word ]
+                    Html.span
+                        [ Html.Attributes.style
+                            [ ( "border-bottom", "1px solid" )
+                            , ( "cursor", "pointer" )
+                            ]
+                        , Html.Events.onClick <| WordRemoved index
+                        ]
+                        [ Html.text word ]
 
         choices =
             -- Display either the chosen word or an empty placeholder for each word
-            List.indexedMap (\index _ -> placeholderOrWord (Dict.get index wordChoices)) withHoles.words
+            List.indexedMap (\index _ -> placeholderOrWord (Dict.get index wordChoices) index) withHoles.words
     in
         Html.div []
             [ Html.h1 []
@@ -258,6 +279,7 @@ viewWordList { withHoles } wordChoices =
             (\index word ->
                 Html.button
                     [ Html.Events.onClick <| WordChosen word
+                    , Html.Attributes.style [ ( "cursor", "pointer" ) ]
                     , Html.Attributes.id <| "choice-" ++ (toString index)
                     ]
                     [ Html.text word ]
