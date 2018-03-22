@@ -4,6 +4,13 @@ Textual game to memorize Bible verses.
 
 Play it [online](https://magopian.github.io/bible_memo/)
 
+To publish it to github pages (if you have `gh-pages` installed):
+
+```
+$ elm-app build
+$ gh-pages -d build/
+```
+
 
 This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/create-elm-app).
 
