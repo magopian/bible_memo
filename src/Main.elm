@@ -81,8 +81,7 @@ shuffleVerseWords verse seed =
 
 
 type Msg
-    = WordChosen Int String
-    | WordClicked String
+    = WordChosen String
     | NextVerse
     | Focused (Result Dom.Error ())
     | DatasetChosen Verses.Dataset
@@ -104,18 +103,10 @@ update msg model =
                     , wordChoices = Dict.empty
                     , seed = newSeed
                   }
-                , Task.attempt Focused (Dom.focus "select-0")
+                , Task.attempt Focused (Dom.focus "choice-0")
                 )
 
-        WordChosen selectNumber wordChosen ->
-            ( { model
-                | wordChoices =
-                    Dict.insert selectNumber wordChosen model.wordChoices
-              }
-            , Cmd.none
-            )
-
-        WordClicked word ->
+        WordChosen word ->
             case model.verseData of
                 Unknown ->
                     ( model, Cmd.none )
@@ -168,7 +159,7 @@ update msg model =
                             , wordChoices = Dict.empty
                             , seed = newSeed
                           }
-                        , Task.attempt Focused (Dom.focus "select-0")
+                        , Task.attempt Focused (Dom.focus "choice-0")
                         )
 
         Focused _ ->
@@ -204,7 +195,7 @@ view model =
                 VerseData verse verseList ->
                     Html.div []
                         [ viewVerse verse model.wordChoices
-                        , viewWordChoices verse model.wordChoices
+                        , viewWordList verse model.wordChoices
                         , viewResult verse model.wordChoices
                         ]
     in
@@ -239,25 +230,36 @@ viewVerse { reference, withHoles } wordChoices =
             -- Make all the "text with holes" parts into Html.text nodes
             List.map Html.text withHoles.text
 
-        selects =
-            -- Make a select with the list of words to choose from... for all the words to choose from
-            List.indexedMap (\index _ -> wordChoiceSelect index withHoles.words (Dict.get index wordChoices)) withHoles.words
+        placeholderOrWord : Maybe String -> Html.Html Msg
+        placeholderOrWord maybeWord =
+            case maybeWord of
+                Nothing ->
+                    Html.span [ Html.Attributes.style [ ( "display", "inline-block" ), ( "min-width", "2em" ), ( "border-bottom", "1px solid" ) ] ] []
+
+                Just word ->
+                    Html.span [ Html.Attributes.style [ ( "border-bottom", "1px solid" ) ] ] [ Html.text word ]
+
+        choices =
+            -- Display either the chosen word or an empty placeholder for each word
+            List.indexedMap (\index _ -> placeholderOrWord (Dict.get index wordChoices)) withHoles.words
     in
         Html.div []
             [ Html.h1 []
                 [ Html.text reference
                 ]
-            , Html.p [] <| zipLists htmlTextWithHoles selects
+            , Html.p [] <| zipLists htmlTextWithHoles choices
             ]
 
 
-viewWordChoices : Verses.Verse -> WordChoices -> Html.Html Msg
-viewWordChoices { withHoles } wordChoices =
+viewWordList : Verses.Verse -> WordChoices -> Html.Html Msg
+viewWordList { withHoles } wordChoices =
     Html.div [] <|
         List.indexedMap
             (\index word ->
                 Html.button
-                    [ Html.Events.onClick <| WordClicked word ]
+                    [ Html.Events.onClick <| WordChosen word
+                    , Html.Attributes.id <| "choice-" ++ (toString index)
+                    ]
                     [ Html.text word ]
             )
             withHoles.words
@@ -274,7 +276,7 @@ viewResult { text, withHoles } wordChoices =
             [ if reconstituded == text then
                 Html.text "CONGRATULATIONS! Would you like to "
               else
-                Html.text "Select the correct words from the lists to complete the verse, or "
+                Html.text "Click the words from the list above to complete the verse in order, or "
             , Html.button
                 [ Html.Events.onClick NextVerse
                 , Html.Attributes.id "another-verse"
@@ -298,40 +300,19 @@ reconstituteVerse withHoles wordChoices =
 
 
 zipLists : List a -> List a -> List a
-zipLists htmlTextWithHoles selects =
-    case ( htmlTextWithHoles, selects ) of
+zipLists list1 list2 =
+    case ( list1, list2 ) of
         ( [], [] ) ->
             []
 
-        ( firstSplit :: restOfSplits, [] ) ->
-            firstSplit :: zipLists restOfSplits []
+        ( list1Head :: list1Tail, [] ) ->
+            list1Head :: zipLists list1Tail []
 
-        ( [], firstSelect :: restOfSelects ) ->
-            firstSelect :: zipLists [] restOfSelects
+        ( [], list2Head :: list2Tail ) ->
+            list2Head :: zipLists [] list2Tail
 
-        ( firstSplit :: restOfSplits, firstSelect :: restOfSelects ) ->
-            firstSplit :: firstSelect :: zipLists restOfSplits restOfSelects
-
-
-wordChoiceSelect : Int -> List String -> Maybe String -> Html.Html Msg
-wordChoiceSelect index words maybeSelectedWord =
-    Html.select
-        [ Html.Events.on
-            "change"
-            (Json.Decode.map (WordChosen index) Html.Events.targetValue)
-        , Html.Attributes.value <| Maybe.withDefault "-choose a word-" maybeSelectedWord
-        , Html.Attributes.id <| "select-" ++ (toString index)
-        , Html.Attributes.size <| (List.length words) + 1
-        ]
-        (Html.option
-            [ Html.Attributes.value "-choose a word-"
-            ]
-            []
-            :: (List.map
-                    (\word -> Html.option [ Html.Attributes.value word ] [ Html.text word ])
-                    words
-               )
-        )
+        ( list1Head :: list1Tail, list2Head :: list2Tail ) ->
+            list1Head :: list2Head :: zipLists list1Tail list2Tail
 
 
 
