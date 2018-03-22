@@ -82,6 +82,7 @@ shuffleVerseWords verse seed =
 
 type Msg
     = WordChosen Int String
+    | WordClicked String
     | NextVerse
     | Focused (Result Dom.Error ())
     | DatasetChosen Verses.Dataset
@@ -113,6 +114,41 @@ update msg model =
               }
             , Cmd.none
             )
+
+        WordClicked word ->
+            case model.verseData of
+                Unknown ->
+                    ( model, Cmd.none )
+
+                VerseData { withHoles } _ ->
+                    let
+                        words =
+                            withHoles.words
+
+                        wordsLength =
+                            List.length words
+
+                        findFirstHole : WordChoices -> Int -> Int
+                        findFirstHole wordChoices tryIndex =
+                            if tryIndex >= (wordsLength - 1) then
+                                tryIndex
+                            else
+                                case (Dict.get tryIndex wordChoices) of
+                                    Nothing ->
+                                        tryIndex
+
+                                    _ ->
+                                        findFirstHole wordChoices (tryIndex + 1)
+
+                        firstHole =
+                            findFirstHole model.wordChoices 0
+                    in
+                        ( { model
+                            | wordChoices =
+                                Dict.insert firstHole word model.wordChoices
+                          }
+                        , Cmd.none
+                        )
 
         NextVerse ->
             case model.verseData of
@@ -168,11 +204,13 @@ view model =
                 VerseData verse verseList ->
                     Html.div []
                         [ viewVerse verse model.wordChoices
+                        , viewWordChoices verse model.wordChoices
                         , viewResult verse model.wordChoices
                         ]
     in
         Html.div []
             [ content
+            , Html.hr [] []
             , viewDataSets Verses.datasets
             ]
 
@@ -211,6 +249,18 @@ viewVerse { reference, withHoles } wordChoices =
                 ]
             , Html.p [] <| zipLists htmlTextWithHoles selects
             ]
+
+
+viewWordChoices : Verses.Verse -> WordChoices -> Html.Html Msg
+viewWordChoices { withHoles } wordChoices =
+    Html.div [] <|
+        List.indexedMap
+            (\index word ->
+                Html.button
+                    [ Html.Events.onClick <| WordClicked word ]
+                    [ Html.text word ]
+            )
+            withHoles.words
 
 
 viewResult : Verses.Verse -> WordChoices -> Html.Html Msg
