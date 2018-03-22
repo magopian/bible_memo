@@ -274,17 +274,25 @@ viewVerse { reference, withHoles } wordChoices =
 
 viewWordList : Verses.Verse -> WordChoices -> Html.Html Msg
 viewWordList { withHoles } wordChoices =
-    Html.div [] <|
-        List.indexedMap
-            (\index word ->
-                Html.button
-                    [ Html.Events.onClick <| WordChosen word
-                    , Html.Attributes.style [ ( "cursor", "pointer" ) ]
-                    , Html.Attributes.id <| "choice-" ++ (toString index)
-                    ]
-                    [ Html.text word ]
-            )
+    let
+        chosenWords =
+            Dict.values wordChoices
+
+        remainingChoices =
             withHoles.words
+                |> List.filter (\word -> not (List.member word chosenWords))
+    in
+        Html.div [] <|
+            List.indexedMap
+                (\index word ->
+                    Html.button
+                        [ Html.Events.onClick <| WordChosen word
+                        , Html.Attributes.style [ ( "cursor", "pointer" ) ]
+                        , Html.Attributes.id <| "choice-" ++ (toString index)
+                        ]
+                        [ Html.text word ]
+                )
+                remainingChoices
 
 
 viewResult : Verses.Verse -> WordChoices -> Html.Html Msg
